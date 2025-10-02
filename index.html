@@ -481,40 +481,48 @@
             }
         }
         
-            @media (max-width: 768px) {
-            .hero-header {
-                flex-direction: column;
-                padding: 1.5rem;
-            }
-            
-            .hero-logo {
-                height: 60px;
-                margin-right: 0;
-                margin-bottom: 1rem;
-            }
-            
-            .hero-header h1 {
-                font-size: 2.5rem;
-            }
-            
-            .stage-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chat-input-group {
-                flex-direction: column;
-            }
-            
-            .chat-button {
-                margin-top: 1rem;
-                width: 100%;
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 5% auto;
-            }
-        }
+        @media (max-width: 768px) {
+    .hero-header {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        padding: 1.5rem;
+        gap: 1rem;
+    }
+    
+    .hero-logo {
+        height: 60px;
+        justify-self: center;
+        grid-column: 1;
+        grid-row: 1;
+    }
+    
+    .hero-content {
+        grid-column: 1;
+        grid-row: 2;
+    }
+    
+    .hero-header h1 {
+        font-size: 2.5rem;
+    }
+    
+    .stage-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .chat-input-group {
+        flex-direction: column;
+    }
+    
+    .chat-button {
+        margin-top: 1rem;
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
     </style>
 </head>
 <body>
