@@ -771,9 +771,6 @@
             <div class="stage-card" onclick="openModal('followup')">
                 <p class="stage-card-text">I'm in follow-up care</p>
             </div>
-            <div class="stage-card full-width" onclick="scrollToChat()">
-                <p class="stage-card-text">I'm not sure or I just have questions</p>
-            </div>
         </div>
         
 <!--       <div class="chat-container" id="chat-section">
@@ -1098,12 +1095,6 @@ For example:
             question.classList.toggle('active');
         }
         
-        function scrollToChat() {
-            document.getElementById('chat-section').scrollIntoView({ 
-                behavior: 'smooth',
-                block: 'center'
-            });
-        }
         
         // Close modal when clicking outside
         window.onclick = function(event) {
@@ -1181,6 +1172,41 @@ function sendWidgetMessage() {
 window.addEventListener('DOMContentLoaded', function() {
     const popup = document.getElementById('chatPopup');
     popup.classList.add('active');
+});
+
+// Open chatbot by default when page loads (only on desktop)
+window.addEventListener('DOMContentLoaded', function() {
+    const popup = document.getElementById('chatPopup');
+    const button = document.getElementById('chatWidgetButton');
+    
+    // Check if device is mobile (screen width less than 768px)
+    if (window.innerWidth > 768) {
+        // Desktop: Open chatbot by default
+        popup.classList.add('active');
+        button.style.display = 'none';
+    } else {
+        // Mobile: Keep chatbot closed, show button
+        popup.classList.remove('active');
+        button.style.display = 'flex';
+    }
+});
+
+// Handle window resize
+window.addEventListener('resize', function() {
+    const popup = document.getElementById('chatPopup');
+    const button = document.getElementById('chatWidgetButton');
+    
+    // If resizing from mobile to desktop or vice versa
+    if (window.innerWidth > 768 && !popup.classList.contains('active')) {
+        // Desktop: Open chatbot
+        popup.classList.add('active');
+        button.style.display = 'none';
+    } else if (window.innerWidth <= 768 && popup.classList.contains('active')) {
+        // Mobile: You can choose to keep it open or close it
+        // Uncomment the next two lines if you want it to close when resizing to mobile
+         popup.classList.remove('active');
+         button.style.display = 'flex';
+    }
 });
 
 
