@@ -16,7 +16,7 @@ class Config:
     EMBEDDING_DIMENSION = 1536  # Default for text-embedding-3-small
     
     # Search configuration
-    DEFAULT_SIMILARITY_THRESHOLD = 0.7  # Default threshold for matching
+    DEFAULT_SIMILARITY_THRESHOLD = 0.6  # Default threshold for matching
     MIN_SIMILARITY_THRESHOLD = 0.5  # Minimum allowed threshold
     MAX_SIMILARITY_THRESHOLD = 0.95  # Maximum allowed threshold
     

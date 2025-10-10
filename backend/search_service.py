@@ -84,7 +84,7 @@ class SemanticSearchService:
         
         return similarities
     
-    def search(self, query: str, threshold: float = 0.7) -> Dict[str, Any]:
+    def search(self, query: str, threshold: float = 0.6) -> Dict[str, Any]:
         """
         Perform semantic search for a query
         
