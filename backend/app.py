@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from data_loader import CSVDataLoader
 from embedding_service import OpenAIEmbeddingService
 from search_service import SemanticSearchService
+from fallback_handler import FallbackResponseHandler, FallbackConfig
 from config import Config
 
 # Load environment variables
@@ -23,7 +24,24 @@ CORS(app)  # Enable CORS for all routes
 config = Config()
 data_loader = CSVDataLoader(config.CSV_URL)
 embedding_service = OpenAIEmbeddingService(os.getenv("OPENAI_API_KEY"))
-search_service = SemanticSearchService(data_loader, embedding_service)
+
+# Initialize fallback handler if intelligent fallback is enabled
+fallback_config = FallbackConfig.from_env()
+fallback_handler = None
+if fallback_config.get('enable_intelligent_fallback', True):
+    try:
+        fallback_handler = FallbackResponseHandler(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model=fallback_config.get('model', 'gpt-4o-mini'),
+            max_tokens=fallback_config.get('max_tokens', 300),
+            temperature=fallback_config.get('temperature', 0.7)
+        )
+        print(f"Intelligent fallback enabled with model: {fallback_config.get('model')}")
+    except Exception as e:
+        print(f"Warning: Could not initialize fallback handler: {e}")
+        print("Will use default fallback responses")
+
+search_service = SemanticSearchService(data_loader, embedding_service, fallback_handler)
 
 # Load data at startup
 print("Loading dataset...")
@@ -135,12 +153,19 @@ def get_stats():
     """Get statistics about the dataset"""
     try:
         data = data_loader.get_data()
-        return jsonify({
+        stats = {
             "total_questions": len(data),
             "csv_url": config.CSV_URL,
             "embedding_model": config.EMBEDDING_MODEL,
-            "default_threshold": config.DEFAULT_SIMILARITY_THRESHOLD
-        })
+            "default_threshold": config.DEFAULT_SIMILARITY_THRESHOLD,
+            "intelligent_fallback_enabled": fallback_handler is not None
+        }
+        
+        # Add fallback statistics if available
+        if fallback_handler:
+            stats["fallback_stats"] = fallback_handler.get_usage_stats()
+        
+        return jsonify(stats)
     except Exception as e:
         return jsonify({
             "error": "Failed to get statistics",

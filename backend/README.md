@@ -10,7 +10,16 @@ This backend provides a semantic search API for sarcoma-related questions and an
 - **`data_loader.py`**: Abstract data loading with CSV implementation (easily extensible to databases)
 - **`embedding_service.py`**: OpenAI embedding generation with caching support
 - **`search_service.py`**: Cosine similarity search logic
+- **`fallback_handler.py`**: Intelligent GPT-powered fallback responses for low-similarity queries
 - **`config.py`**: Centralized configuration management
+
+### Intelligent Fallback System
+When a user's query doesn't match any existing Q&A pairs above the similarity threshold, the system can generate intelligent responses using GPT models. This fallback system:
+- Detects emergency symptoms and provides urgent care instructions
+- Encourages users to rephrase questions with more detail
+- Provides helpful guidance to appropriate resources
+- Handles typos and interprets medical terminology
+- Prevents sharing of personal information
 
 ## Setup
 
@@ -24,6 +33,12 @@ Create a `.env` file in the backend directory:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
 ENVIRONMENT=development  # or production
+
+# Optional: Intelligent Fallback Configuration
+ENABLE_INTELLIGENT_FALLBACK=True  # Enable/disable GPT fallback
+FALLBACK_MODEL=gpt-4o-mini  # Options: gpt-4o, gpt-4o-mini, gpt-3.5-turbo
+FALLBACK_MAX_TOKENS=300
+FALLBACK_TEMPERATURE=0.7
 ```
 
 ### 3. Run Locally

@@ -6,21 +6,27 @@ from typing import Dict, Any, List, Tuple, Optional
 from scipy.spatial.distance import cdist
 from data_loader import DataLoader
 from embedding_service import EmbeddingService
+from typing import Optional
+from fallback_handler import FallbackResponseHandler
 
 
 class SemanticSearchService:
     """Service for performing semantic search using cosine similarity"""
     
-    def __init__(self, data_loader: DataLoader, embedding_service: EmbeddingService):
+    def __init__(self, data_loader: DataLoader, 
+                 embedding_service: EmbeddingService,
+                 fallback_handler: Optional[FallbackResponseHandler] = None):
         """
         Initialize semantic search service
         
         Args:
             data_loader: Data loader instance
             embedding_service: Embedding service instance
+            fallback_handler: Optional fallback response handler for intelligent responses
         """
         self.data_loader = data_loader
         self.embedding_service = embedding_service
+        self.fallback_handler = fallback_handler
         
         # Default responses for when no good match is found
         self.default_response = {
@@ -84,7 +90,7 @@ class SemanticSearchService:
         
         return similarities
     
-    def search(self, query: str, threshold: float = 0.6) -> Dict[str, Any]:
+    def search(self, query: str, threshold: float = 0.7) -> Dict[str, Any]:
         """
         Perform semantic search for a query
         
@@ -112,17 +118,42 @@ class SemanticSearchService:
             
             print(f"Best match score: {best_score:.4f} (threshold: {threshold})")
             
+            # Get the best matching entry for reference
+            best_match = self.data_loader.get_entry_by_index(int(best_index))
+            
             # Check if best match meets threshold
             if best_score < threshold:
-                return {
-                    **self.default_response,
-                    "similarity_score": float(best_score),
-                    "matched_question": None,
-                    "threshold_used": threshold
-                }
-            
-            # Get the matching entry
-            best_match = self.data_loader.get_entry_by_index(int(best_index))
+                # Check for emergency keywords first
+                if self.fallback_handler and hasattr(self.fallback_handler, 'check_emergency_keywords'):
+                    emergency_response = self.fallback_handler.check_emergency_keywords(query)
+                    if emergency_response:
+                        return {
+                            "answer": emergency_response,
+                            "source": "Emergency Response System",
+                            "similarity_score": float(best_score),
+                            "matched_question": None,
+                            "threshold_used": threshold,
+                            "emergency_response": True
+                        }
+                
+                # Use intelligent fallback if available
+                if self.fallback_handler:
+                    print("Using intelligent fallback response...")
+                    fallback_response = self.fallback_handler.generate_fallback_response(
+                        user_query=query,
+                        similarity_score=float(best_score),
+                        closest_match=best_match['question']
+                    )
+                    fallback_response['threshold_used'] = threshold
+                    return fallback_response
+                else:
+                    # Use default fallback if no handler available
+                    return {
+                        **self.default_response,
+                        "similarity_score": float(best_score),
+                        "matched_question": None,
+                        "threshold_used": threshold
+                    }
             
             return {
                 "answer": best_match['answer'],

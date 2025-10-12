@@ -36,6 +36,12 @@ class Config:
         "or consult with a medical professional for personalized advice."
     )
     
+    # Intelligent Fallback Configuration
+    ENABLE_INTELLIGENT_FALLBACK = os.getenv("ENABLE_INTELLIGENT_FALLBACK", "True").lower() == "true"
+    FALLBACK_MODEL = os.getenv("FALLBACK_MODEL", "gpt-4o-mini")  # Options: gpt-4o, gpt-4o-mini, gpt-3.5-turbo
+    FALLBACK_MAX_TOKENS = int(os.getenv("FALLBACK_MAX_TOKENS", "300"))
+    FALLBACK_TEMPERATURE = float(os.getenv("FALLBACK_TEMPERATURE", "0.7"))
+    
     # Logging configuration
     LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
     LOG_FORMAT = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
