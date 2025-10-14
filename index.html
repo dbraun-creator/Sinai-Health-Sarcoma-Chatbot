@@ -1250,7 +1250,7 @@ function sendWidgetMessage() {
         const botResponse = data.response || data.answer || data.result || 'I received your message but could not generate a response.';
         
         botMsg.innerHTML = `
-            <div class="message-avatar">🤖</div>
+            <div class="message-avatar">😊</div>
             <div class="message-content">${linkify(botResponse)}</div>
         `;
         messagesContainer.appendChild(botMsg);
@@ -1267,7 +1267,7 @@ function sendWidgetMessage() {
         const errorMsg = document.createElement('div');
         errorMsg.className = 'bot-message-widget';
         errorMsg.innerHTML = `
-            <div class="message-avatar">🤖</div>
+            <div class="message-avatar">😊</div>
             <div class="message-content" style="color: #dc2626;">Sorry, I'm having trouble connecting right now. Please try again later or contact support if the problem persists.</div>
         `;
         messagesContainer.appendChild(errorMsg);
