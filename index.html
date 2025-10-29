@@ -735,6 +735,52 @@
     animation: pulse 1.5s ease-in-out infinite;
 }
 
+.feedback-section {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    margin: 3rem 0 2rem 0;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06);
+    border: 2px solid #93c5fd;
+    text-align: center;
+}
+
+.feedback-heading {
+    color: #1e3a8a;
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.feedback-text {
+    color: #4b5563;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.feedback-button {
+    display: inline-block;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    color: white;
+    text-decoration: none;
+    padding: 1rem 2.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+}
+
+.feedback-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 58, 138, 0.35);
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+}
+
 @keyframes pulse {
     0%, 100% {
         opacity: 0.7;
@@ -944,6 +990,17 @@ For example:
             <div class="modal-body" id="followupContent"></div>
         </div>
     </div>
+
+    <!-- Feedback Section -->
+        <div class="feedback-section">
+            <h2 class="feedback-heading">Help Us Improve</h2>
+            <p class="feedback-text">
+                Your feedback is valuable to us! Please take a moment to share your thoughts about this website and chatbot. Your input helps us provide better support for patients and families.
+            </p>
+            <a href="https://www.surveymonkey.com/r/TPTGJ5X" target="_blank" class="feedback-button">
+                Give Feedback
+            </a>
+        </div>
     
     <div class="footer">
         <p class="footer-title">Mount Sinai Hospital Sarcoma Information Chatbot</p>
